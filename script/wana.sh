@@ -4,9 +4,9 @@
 # This script renames wallpaper files with a consistent naming pattern
 
 # Configuration
-PREFIX="wallpaper"                                # Prefix for renamed files
-START_NUMBER=1                                    # Starting number for sequential naming
-DRY_RUN=false                                     # Set to true to preview changes without renaming
+PREFIX="wallpaper"                                
+START_NUMBER=1                                   
+DRY_RUN=false                                    
 
 # Supported image extensions
 SUPPORTED_EXTENSIONS=("jpg" "jpeg" "png" "bmp" "gif" "tiff" "webp" "svg")
@@ -22,24 +22,19 @@ usage() {
     echo "  -e, --extensions       List supported file extensions"
 }
 
-# Function to list supported extensions
+
 list_extensions() {
     echo "Supported file extensions: ${SUPPORTED_EXTENSIONS[*]}"
 }
 
-# Function to ask for directory interactively
+
 ask_for_directory() {
     local folder_path
-    
-    # Try different methods to get folder dialog
     if command -v zenity &> /dev/null; then
-        # Zenity (GNOME)
         folder_path=$(zenity --file-selection --directory --title="Select Wallpapers Folder" 2>/dev/null)
     elif command -v kdialog &> /dev/null; then
-        # KDialog (KDE)
         folder_path=$(kdialog --getexistingdirectory . --title "Select Wallpapers Folder" 2>/dev/null)
     elif command -v osascript &> /dev/null; then
-        # AppleScript (macOS)
         folder_path=$(osascript <<EOF 2>/dev/null
 tell application "System Events"
     activate
@@ -49,13 +44,13 @@ EOF
 )
     fi
     
-    # If no graphical tool found or dialog was cancelled, use text input
+   
     if [[ -z "$folder_path" ]]; then
         echo "No graphical dialog tool found. Please enter the path manually." >&2
         while true; do
             read -p "Enter the path to your wallpapers folder: " folder_path
             
-            # Expand ~ to home directory
+  
             folder_path="${folder_path/#\~/$HOME}"
             
             if [[ -z "$folder_path" ]]; then
@@ -83,8 +78,7 @@ EOF
             fi
         done
     fi
-    
-    # Verify the selected directory exists
+   
     if [[ ! -d "$folder_path" ]]; then
         echo "Error: Selected directory '$folder_path' does not exist!"
         exit 1
@@ -93,7 +87,6 @@ EOF
     echo "$folder_path"
 }
 
-# Parse command line arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
         -p|--prefix)
@@ -129,23 +122,23 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Ask for the wallpaper directory
+
 echo "=== Wallpaper Renamer ==="
 WALLPAPER_DIR=$(ask_for_directory)
 
 echo "Selected folder: $WALLPAPER_DIR"
 
-# Convert extensions to lowercase for case-insensitive matching
+
 declare -a lower_extensions
 for ext in "${SUPPORTED_EXTENSIONS[@]}"; do
     lower_extensions+=("${ext,,}")
 done
 
-# Function to check if file has supported extension
+
 is_supported_extension() {
     local filename="$1"
     local extension="${filename##*.}"
-    extension="${extension,,}"  # Convert to lowercase
+    extension="${extension,,}" 
     
     for ext in "${lower_extensions[@]}"; do
         if [[ "$extension" == "$ext" ]]; then
@@ -155,7 +148,7 @@ is_supported_extension() {
     return 1
 }
 
-# Function to sanitize filename (remove special characters)
+
 sanitize_filename() {
     echo "$1" | sed 's/[^a-zA-Z0-9._-]/_/g'
 }
@@ -171,20 +164,20 @@ counter=$START_NUMBER
 renamed_count=0
 skipped_count=0
 
-# Find and process image files
+
 while IFS= read -r -d '' file; do
     filename=$(basename "$file")
     
     if is_supported_extension "$filename"; then
-        # Get file extension
+  
         extension="${filename##*.}"
         
-        # Generate new filename
+    
         new_filename="${PREFIX}_$(printf "%03d" $counter).${extension,,}"
         new_filename=$(sanitize_filename "$new_filename")
         new_path="$WALLPAPER_DIR/$new_filename"
         
-        # Check if new filename would conflict with existing file
+     
         if [[ -e "$new_path" && "$file" != "$new_path" ]]; then
             echo "Warning: '$new_filename' already exists. Skipping '$filename'"
             ((skipped_count++))
