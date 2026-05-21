@@ -2,11 +2,9 @@
 
 <p align="center">
  <img src='/wallpapers/fireplace.png' alt='showcase' width=100%>
+ <img src='/wallpapers/bikerlady.jpeg' alt='showcase' width=100%>
  <img src='/wallpapers/swordmistress.png' alt='showcase' width=100%>
- <img src='/wallpapers/toji.png' alt='showcase' width=100%>
- <img src='/wallpapers/wallpaper_005.jpg' alt='showcase' width=100%>
- <img src='//wallpapers/wallpaper_017.jpg' alt='showcase' width=100%>
- <img src='/wallpapers/wallpaper_022.jpg' alt='showcase' width=100%>
- <img src='/wallpapers/wallpaper_056.png' alt='showcase' width=100%>
- <img src='/wallpapers/wallpaper_032.png' alt='showcase' width=100%>
+ <img src='/ryo/wallpaper_004.png' alt='showcase' width=100%>
+ <img src='/mocha/danbo.jpg' alt='showcase' width=100%>
+ <img src='/moonfly/jingliu_maxxed.jpeg' alt='showcase' width=100%>
 </p>
